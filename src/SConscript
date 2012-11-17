@@ -1,0 +1,17 @@
+Import(['env', 'project_name'])
+
+SConscript(Glob('*/SConscript'), exports = 'env')
+
+srcs = Glob('*.c')
+objs = env.Object(srcs)
+
+target_name = project_name
+map_name = target_name + '.map'
+elf_name = target_name + '.elf'
+hex_name = target_name + '.hex'
+
+elf_sources = objs + Glob('*/*.obj')
+
+elf = env.Elf(elf_name, elf_sources) 
+hex = env.Hex(hex_name, elf_name)
+env.Depends(hex, elf_name)
